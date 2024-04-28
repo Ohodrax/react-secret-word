@@ -22,7 +22,7 @@ const guessesQtd = 5;
 const scorePoints = 100;
 
 function App() {
-  const [gameStage, setGameStage] = useState(stages[0].name);
+  const [gameStage, setGameStage] = useState("start");
   const [words] = useState(wordsList);
 
   const [pickedWord, setPickedWord] = useState("");
@@ -119,21 +119,24 @@ function App() {
     }
   }, [guesses]);
 
+
   // checa se todas as letras foram acertadas
   useEffect(() => {
     // extrai as letras acertadas do array formado a partir da palavra que esta sendo adivinhada
-    const uniqueLetters = [...new Set(letters)];
-
-    if (guessedLetters.length === uniqueLetters.length) {
-      // adicionar score
-      setScore((actualScore) => actualScore += scorePoints);
-
-      // recomeçar jogo
-      startGame();
-      setGuesses(guessesQtd);
+    if (gameStage === "game") {
+      const uniqueLetters = [...new Set(letters)];
+  
+      if (guessedLetters.length === uniqueLetters.length) {
+        // adicionar score
+        setScore((actualScore) => actualScore += scorePoints);
+  
+        // recomeçar jogo
+        startGame();
+        setGuesses(guessesQtd);
+      }
     }
+  }, [guessedLetters, letters, startGame, gameStage]);
 
-  }, [guessedLetters, letters, startGame])
 
   // reiniciar game
   const retry = () => {
